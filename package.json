@@ -1,0 +1,25 @@
+{
+  "name": "carets",
+  "version": "1.0.1",
+  "description": "A terminal prompt input library for node with easy multiline input",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/draeder/carets.git"
+  },
+  "keywords": [
+    "prompt",
+    "readline",
+    "carets"
+  ],
+  "author": "Daniel Raeder",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/draeder/carets/issues"
+  },
+  "homepage": "https://github.com/draeder/carets#readme",
+  "devDependencies": {}
+}
