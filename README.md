@@ -19,6 +19,8 @@ carets.on('doc', doc => {
 carets.on('line', line => {
   console.log(line)
 })
+
+carets.change({caret: '!', caretText: 'different', caretMultilineText: 'different document'})
 ```
 
 ## Keystroke Commands
@@ -56,14 +58,27 @@ Creates a new instance of Carets
 ```js
 let carets = new Carets({caret: '>', caretText: 'hello', caretMultilineText: 'hello document'})
 ```
-#### `params.caret`
+#### `params`
+
+##### `params.caret`
 The string you would like to use as your caret
 
-#### `params.caretText`
+##### `params.caretText`
 The text you would like your prompt to show before the caret
 
-#### `params.ceretMultilineText`
+##### `params.ceretMultilineText`
 The text you would like your prompt to show when it is in document / multiline mode.
+
+## Methods
+### `carets.change(params)
+Change the carets
+
+This is experimental and may have unexpected results.
+
+#### Example
+```js
+carets.change({caret: '!', caretText: 'different', caretMultilineText: 'different document'})
+```
 
 ## Events
 ### `carets.on('line', data)`

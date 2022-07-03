@@ -25,8 +25,17 @@ const Carets = function(params){
   let docmode = false
   let doc = {}
 
-  rl.setPrompt(caret)
-  rl.prompt(true)
+  carets.change = (params) => {
+    caretSymbol = params.caret || caretSymbol
+    caretText = params.caretText || caretText
+    caret = caretText ? caretText + ' ' + caretSymbol + ' ' : caretSymbol + ' '
+    caretMultilineText = params.caretMultilineText || caretMultilineText
+  }
+
+  setTimeout(()=>{
+    rl.setPrompt(caret)
+    rl.prompt(true)  
+  }, 1)
 
   readline.emitKeypressEvents(stdin)
 
