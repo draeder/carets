@@ -25,6 +25,23 @@ carets.on('line', line => {
 ### `CTRL+W`
 Toggle between document / multiline object creation mode or line mode
 
+When in document / multiline mode, lines are inserted into an object with the date string as their keys. This may be used to sort the document when it is returned.
+
+For example:
+```js
+carets.on('doc', doc => {
+  let docOrder = Object.keys(doc)
+  docOrder.sort()
+  for(let i in docOrder){
+    process.stdout.write(doc[docOrder[i]])
+  }
+  docOrder.reverse()
+  for(let i in docOrder){
+    process.stdout.write(doc[docOrder[i]])
+  }
+})
+```
+
 ### `CTRL+C` or `CTRL+D`
 Exit the application
 
