@@ -29,6 +29,8 @@ Toggle between document / multiline object creation mode or line mode
 
 When in document / multiline mode, lines are inserted into an object with the date string as their keys. This may be used to sort the document when it is returned.
 
+Exit this mode, save and emit the document / multiline object (if it has data) with `CTRL+W`.
+
 For example:
 ```js
 carets.on('doc', doc => {
