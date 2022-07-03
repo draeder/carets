@@ -48,6 +48,7 @@ The text you would like your prompt to show before the caret
 #### `params.ceretMultilineText`
 The text you would like your prompt to show when it is in document / multiline mode.
 
+## Events
 ### `carets.on('line', data)`
 Listen for new line input
 
