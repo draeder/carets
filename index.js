@@ -17,11 +17,12 @@ const Carets = function(params){
   const stdout = process.stdout
   stdout.setEncoding('utf8')
 
+  if(!params) params = {}
 
-  let caretSymbol = params.caret
-  let caretText = params.caretText
-  let caret = caretText ? caretText + ' ' + caretSymbol + ' ' : caretSymbol + ' '
-  let caretMultilineText = params.caretMultilineText
+  let caretSymbol = params.caret || '>'
+  let caretText = params.caretText || ''
+  let caret = caretText ? caretText + ' ' + caretSymbol + ' ' : caretSymbol + ' ' 
+  let caretMultilineText = params.caretMultilineText || ''
   let docmode = false
   let doc = {}
 
