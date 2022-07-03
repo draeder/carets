@@ -19,8 +19,8 @@ const Carets = function(params){
 
 
   let caretSymbol = params.caret
-  let caretext = params.caretext
-  let caret = caretext ? caretext + ' ' + caretSymbol + ' ' : caretSymbol + ' '
+  let caretText = params.caretText
+  let caret = caretText ? caretText + ' ' + caretSymbol + ' ' : caretSymbol + ' '
   let caretMultilineText = params.caretMultilineText
   let docmode = false
   let doc = {}
