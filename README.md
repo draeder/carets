@@ -71,7 +71,7 @@ Display a prompt
 ### `carets.pause()`
 Pause the prompt and terminal input processing
 
-### `carets.resume([string])`
+### `carets.resume()`
 Resume the prompt and terminal input processing. This enables the prompt to repeat after processing new input.
 
 #### Example
