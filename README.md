@@ -8,43 +8,39 @@ npm i carets
 
 ### Example
 ```js
-let Carets = require('carets')
+import Carets from 'carets'
 
-let carets = new Carets({caret: '>', caretText: 'hello', caretMultilineText: 'hello document'})
+let carets = new Carets({caret: 'carets > ', docCaret: 'doc $ > '})
 
-carets.on('doc', doc => {
-  console.log(doc)
+carets.prompt()
+
+carets.on('line', data => { 
+  console.log(data)
+  carets.pause()
+  setTimeout(()=>{
+    carets.resume()
+    carets.prompt()
+  }, 1000)
 })
 
-carets.on('line', line => {
-  console.log(line)
+let doc = {}
+let docName = ''
+carets.on('doc', data => {
+  if(data && typeof data === 'string') docName = data
+  else if(Object.keys(data).length > 0){
+    doc = data
+    console.log('Name:', docName, '\r\n', doc)
+  }
 })
-
-carets.change({caret: '!', caretText: 'different', caretMultilineText: 'different document'})
 ```
 
 ## Keystroke Commands
-### `CTRL+W`
+### `CTRL+W` or `OPT+BACKSPACE`
 Toggle between document / multiline object creation mode or line mode
 
-When in document / multiline mode, lines are inserted into an object with the date string as their keys. This may be used to sort the document when it is returned.
+When in document / multiline mode, lines are inserted into an object with UNIX time as their keys. This may be used to sort the document when it is returned.
 
-Exit this mode, save and emit the document / multiline object (if it has data) with `CTRL+W`.
-
-For example:
-```js
-carets.on('doc', doc => {
-  let docOrder = Object.keys(doc)
-  docOrder.sort()
-  for(let i in docOrder){
-    process.stdout.write(doc[docOrder[i]])
-  }
-  docOrder.reverse()
-  for(let i in docOrder){
-    process.stdout.write(doc[docOrder[i]])
-  }
-})
-```
+Exit this mode, save and emit the document / multiline object (if it has data) with `CTRL+W` or `OPT+BACKSPACE`.
 
 ### `CTRL+C` or `CTRL+D`
 Exit the application
@@ -52,34 +48,42 @@ Exit the application
 ### Other `CTRL+` key Combinations
 See [readline TTY keybindings documentation](https://nodejs.org/api/readline.html#tty-keybindings)
 
-## Extraordinarily Simple API
+## Simple API
 ### `new Carets(params)`
 Creates a new instance of Carets
 
 #### Example
 ```js
-let carets = new Carets({caret: '>', caretText: 'hello', caretMultilineText: 'hello document'})
+let carets = new Carets({caret: 'carets > ', docCaret: 'carets $ > '})
 ```
 #### `params`
 
 ##### `params.caret`
 The string you would like to use as your caret
 
-##### `params.caretText`
+##### `params.docCaret`
 The text you would like your prompt to show before the caret
 
-##### `params.ceretMultilineText`
-The text you would like your prompt to show when it is in document / multiline mode.
-
 ## Methods
-### `carets.change(params)
-Change the carets
+### `carets.prompt()`
+Display a prompt
 
-This is experimental and may have unexpected results.
+### `carets.pause()`
+Pause the prompt and terminal input processing
+
+### `carets.resume([string])`
+Resume the prompt and terminal input processing. This enables the prompt to repeat after processing new input.
 
 #### Example
 ```js
-carets.change({caret: '!', caretText: 'different', caretMultilineText: 'different document'})
+carets.on('line', data => { 
+  console.log(data)
+  carets.pause()
+  setTimeout(()=>{
+    carets.resume()
+    carets.prompt()
+  }, 1000)
+})
 ```
 
 ## Events
@@ -88,8 +92,8 @@ Listen for new line input
 
 #### Example 
 ```js
-carets.on('line', line => {
-  console.log(line)
+carets.on('line', data => { 
+  console.log(data)
 })
 ```
 
@@ -98,7 +102,16 @@ Listen for new document / multiline object input
 
 #### Example
 ```js
-carets.on('doc', doc => {
-  console.log(doc)
+let doc = {}
+let docName = ''
+carets.on('doc', data => {
+  if(data && typeof data === 'string') docName = data
+  else if(Object.keys(data).length > 0){
+    doc = data
+    console.log('Name:', docName, '\r\n', doc)
+  }
 })
 ```
+
+### LICENCE
+MIT

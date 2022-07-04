@@ -1,10 +1,17 @@
-const readline = require('node:readline')
-const EventEmitter = require('events')
-const { captureRejectionSymbol } = require('node:events')
+import util from 'node:util'
+import readline from'node:readline'
+import EventEmitter from'events'
+
 const rl = readline.createInterface( process.stdin, process.stdout )
 
 const Carets = function(params){
-  let carets = this
+  const carets = this
+
+  const stdin = process.stdin
+  stdin.setEncoding('utf8')
+  const stdout = process.stdout
+  stdout.setEncoding('utf8')
+
   const events = new EventEmitter()
 
   carets.on = events.on.bind(events),
@@ -12,65 +19,59 @@ const Carets = function(params){
   carets.emit = events.emit.bind(events)
   carets.off = events.off.bind(events)
 
-  const stdin = process.stdin
-  stdin.setEncoding('utf8')
-  const stdout = process.stdout
-  stdout.setEncoding('utf8')
+  let prompt = ''
+  let repeat = true
 
-  if(!params) params = {}
-
-  let caretSymbol = params.caret || '>'
-  let caretText = params.caretText || ''
-  let caret = caretText ? caretText + ' ' + caretSymbol + ' ' : caretSymbol + ' ' 
-  let caretMultilineText = params.caretMultilineText || ''
-  let docmode = false
-  let doc = {}
-
-  carets.change = (params) => {
-    caretSymbol = params.caret || caretSymbol
-    caretText = params.caretText || caretText
-    caret = caretText ? caretText + ' ' + caretSymbol + ' ' : caretSymbol + ' '
-    caretMultilineText = params.caretMultilineText || caretMultilineText
+  carets.pause = () => {
+    repeat = false
   }
 
-  setTimeout(()=>{
-    rl.setPrompt(caret)
-    rl.prompt(true)  
-  }, 1)
+  carets.resume = () => {
+    repeat = true
+  }
+
+  carets.on('repeat', (string, bool) => {
+    if(repeat) carets.prompt(string)
+    else return
+  })
+
+  const caret = util.promisify(rl.question).bind(rl)
+
+  let doc = {}
+  rl.on('line', data => {
+    doc[+new Date()] = data
+  })
+
+  carets.prompt = async (string) => {
+    rl.setPrompt(string || params.caret)
+    let data = await caret(string || params.caret)
+    if(docmode) carets.emit('doc', data)
+    carets.emit('line', data)
+    if(repeat)
+    carets.prompt(string)
+  }
+
+  let docmode = false
+  let temp
 
   readline.emitKeypressEvents(stdin)
-
-  if (process.stdin.isTTY) process.stdin.setRawMode(true)
+  process.stdin.isTTY ? process.stdin.setRawMode(true) : ''
 
   process.stdin.on('keypress', (str, key) => {
     if(key.ctrl && key.name === 'w'){
-      docmode ? docmode = false : docmode = true
-      if(docmode){
-        rl.setPrompt(caretMultilineText + ' ' + caretSymbol + ' ')
-        doc = {}
+      temp = prompt
+      if(!docmode){
+        docmode = true
+        carets.prompt(params.docCaret)
+        carets.pause()
       } else {
-        rl.setPrompt(caret)
-      }
-      if(doc && !docmode){
-        if(Object.keys(doc).length > 0)
+        docmode = false
         carets.emit('doc', doc)
-        rl.prompt()
+        carets.prompt(params.caret)
+        carets.resume()
       }
-      rl.prompt()
     }
   })
-
-  rl.on('line', data => {
-    if(docmode){
-      let date = new Date().getTime()
-      doc[date] = data + '\r\n'
-    } else {
-      carets.emit('line', data)
-      rl.prompt()
-    }
-  })
-
-  return carets
 }
 
-module.exports = Carets
+export default Carets

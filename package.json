@@ -1,8 +1,9 @@
 {
   "name": "carets",
-  "version": "1.0.7",
+  "version": "2.0.0",
   "description": "A terminal prompt input library for node with easy multiline input",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
