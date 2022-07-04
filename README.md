@@ -62,7 +62,7 @@ let carets = new Carets({caret: 'carets > ', docCaret: 'carets $ > '})
 The string you would like to use as your caret
 
 ##### `params.docCaret`
-The text you would like your prompt to show before the caret
+The string you would like to use as your caret in document / multiline mode
 
 ## Methods
 ### `carets.prompt()`

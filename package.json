@@ -1,6 +1,6 @@
 {
   "name": "carets",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A terminal prompt input library for node with easy multiline input",
   "main": "index.js",
   "type": "module",
