@@ -1,24 +1,68 @@
 import Carets from './index.js'
 
-let carets = new Carets({caret: 'carets > ', docCaret: 'doc $ > '})
+let params = {
+  caret: 'carets > ',
+  docCaret: '$ '
+}
 
-carets.prompt()
+// Creates a new Carets instance with the params
+let carets = new Carets(params)
 
-carets.on('line', data => { 
-  console.log(data)
-  carets.pause()
-  setTimeout(()=>{
-    carets.resume()
-    carets.prompt()
-  }, 1000)
-})
+carets.prompt(params.caret)
 
-let doc = {}
-let docName = ''
-carets.on('doc', data => {
-  if(data && typeof data === 'string') docName = data
-  else if(Object.keys(data).length > 0){
-    doc = data
-    console.log('Name:', docName, '\r\n', doc)
+carets.on('line', data => {
+  // Commands example
+  let cmd = data.split(' ')
+  if(cmd[0] === '`'){
+    cmd.shift()
+    cmd = cmd.join(' ')
+    carets.prompt(cmd ? cmd : '')
+  } 
+  else if(cmd[0] === '~'){
+    console.log(carets.history)
+    carets.prompt(params.caret)
+  } else {
+    console.log(data)
   }
 })
+
+let docname
+carets.on('doc', data => {
+  let doc = {}
+  let keys = Object.keys(data)
+  let docname = data[Math.min(...keys)]
+  delete data[docname]
+  console.log('Name:', docname)
+  delete data[keys[0]]
+  if(keys.length > 0){
+    doc = data
+    console.log(docname, doc)
+  }
+})
+
+carets.on('docmode', bool => {
+  if(bool) {
+    // do something when in docmode
+    setTimeout(()=>{
+      carets.prompt('')
+    })
+  }
+  else {
+    // do something when docmode exits
+    carets.prompt(params.caret)
+  }
+})
+
+setTimeout(()=>{
+  // Change the prompt at a later time
+  carets.prompt('Howdy doody > ')
+  
+  // get a history of prompts
+  let history = carets.history
+  console.log()
+  console.log(history)
+
+  // Change the prompt to something in history
+  carets.prompt(Object.keys(history)[0])
+
+}, 10000)

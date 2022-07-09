@@ -1,6 +1,6 @@
 {
   "name": "carets",
-  "version": "2.0.2",
+  "version": "2.5.0",
   "description": "A terminal prompt input library for node with easy multiline input",
   "main": "index.js",
   "type": "module",
@@ -22,5 +22,9 @@
     "url": "https://github.com/draeder/carets/issues"
   },
   "homepage": "https://github.com/draeder/carets#readme",
+  "dependencies": {
+    "clipboardy": "^3.0.0",
+    "xterm": "^4.19.0"
+  },
   "devDependencies": {}
 }
