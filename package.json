@@ -23,8 +23,7 @@
   },
   "homepage": "https://github.com/draeder/carets#readme",
   "dependencies": {
-    "clipboardy": "^3.0.0",
-    "xterm": "^4.19.0"
+    "clipboardy": "^3.0.0"
   },
   "devDependencies": {}
 }
